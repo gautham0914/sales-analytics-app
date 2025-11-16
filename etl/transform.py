@@ -6,3 +6,4 @@ print(df.head())
 print(df.columns)
 #check for null values 
 df.isnull().sum()
+df.head()
