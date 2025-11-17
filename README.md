@@ -111,14 +111,14 @@ Automate the entire ETL + Database refresh process so the dataset can be cleaned
 
 ### Files created today
 
-etl/pipeline.py → Master ETL + load script
+- etl/pipeline.py → Master ETL + load script
 
-log/pipeline.log → Log file showing timestamps & operations
+- log/pipeline.log → Log file showing timestamps & operations
 
-Updated .gitignore to ignore log files
+- Updated .gitignore to ignore log files
 
 ### How to run the pipeline
-python3 etl/pipeline.py
+- python3 etl/pipeline.py
 
 ### Example log output (from pipeline.log)
 2025-11-17 12:41:39 - INFO - 🚀 Pipeline started
@@ -131,4 +131,101 @@ python3 etl/pipeline.py
 
 2025-11-17 12:41:40 - INFO - Pipeline finished in 0.95 seconds
 
+**Day 5 – Flask API + MySQL Integration (Backend Layer)**
+### Goal
 
+Build a working backend API using Flask that connects to MySQL and returns live game-sales data through JSON endpoints.
+
+### What I built
+
+- A Flask backend (backend/app.py) that:
+
+- Connects to the MySQL salesdb database
+
+- Reads data from the games_sales table
+
+- Returns clean JSON output
+
+- Handles CORS so dashboards/tools can use the API
+
+- Runs on port 5000
+
+- A database connector file (backend/db.py) that:
+
+- Stores database connection settings
+
+- Creates a reusable MySQL connection for the API
+
+Verified the database contains all columns with correct spellings:
+Rank, Name, Platform, Year, Genre, Publisher, NA_Sales, EU_Sales, JP_Sales, Other_Sales, Global_Sales
+
+- Endpoints created
+
+1. /top-games
+Returns the top games ordered by Global_Sales.
+
+2. Check
+Optional: simple root route to confirm server is running.
+
+### What the backend now does
+
+- Converts SQL query results → JSON for frontend or dashboards
+
+- Provides real-time access to the dataset via API
+
+- Allows future dashboards (React, Streamlit, Tableau API, etc.) to pull fresh data
+
+- Fully replaces manual CSV loading in frontend
+
+- Works directly with the cleaned + automated ETL pipeline from Day 4
+
+### Why this is important
+
+- Every modern analytics app uses an API layer to serve data
+
+- Makes the project production-ready
+
+- External tools (React, Python scripts, Power BI, Tableau, etc.) can now consume your data
+
+- API ensures the backend is decoupled from the database
+
+- Enables future endpoints: yearly stats, platform trends, genre insights, etc.
+
+### Files created today
+
+- backend/app.py → Main Flask API service
+
+- backend/db.py → MySQL database connector
+
+Updated requirements.txt with Flask, mysql-connector-python, flask-cors
+
+### How to run the backend
+cd backend
+
+python app.py
+
+
+### Then open:
+http://127.0.0.1:5000/top-games
+
+Example API output (from /top-games)
+[
+  {
+    "Rank": 1,
+    "Name": "Wii Sports",
+    "Platform": "Wii",
+    "Year": 2006,
+    "Genre": "Sports",
+    "Publisher": "Nintendo",
+    "NA_Sales": 41.36,
+    "EU_Sales": 28.96,
+    "JP_Sales": 3.77,
+    "Other_Sales": 8.65,
+    "Global_Sales": 82.74
+  }
+]
+
+### Status
+
+Backend layer is now complete.
+API is live and successfully connected to MySQL.
