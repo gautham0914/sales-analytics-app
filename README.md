@@ -63,4 +63,72 @@ The dataset is fully cleaned and ready for loading into SQL (Day 3).
 
 ### Status
 SQL layer is complete.  
-Dataset is now fully analyzed and ready for **Day 4: Dashboards**.
+Dataset is now fully analyzed and ready.
+
+
+**Day 4 - Automated ETL Pipeline (Python → MySQL + Logging)**
+
+### Goal 
+Automate the entire ETL + Database refresh process so the dataset can be cleaned and loaded into MySQL automatically at any time. 
+
+### What I built
+
+- A pipeline script (etl/pipeline.py) that:
+
+- Loads the cleaned CSV
+
+- Connects to MySQL
+
+- Drops the old table
+
+- Recreates the table
+
+- Inserts all rows
+
+- Writes run logs to log/pipeline.log
+
+### What the pipeline does
+
+- Ensures the database always has the fresh, clean version of the dataset
+
+- Makes the ETL process repeatable with one command
+
+- Logs every action (start time, end time, row count, errors)
+
+- Replaces manual SQL imports with a fully automated workflow
+
+### Why automation is important
+
+- Real-world companies don’t load data manually
+
+- Automated ETL makes the project production-ready
+
+- You can schedule it to run every hour/day
+
+- Ensures the DB is always up-to-date
+
+- Useful when dashboards depend on live data
+
+### Files created today
+
+etl/pipeline.py → Master ETL + load script
+
+log/pipeline.log → Log file showing timestamps & operations
+
+Updated .gitignore to ignore log files
+
+### How to run the pipeline
+python3 etl/pipeline.py
+
+### Example log output (from pipeline.log)
+2025-11-17 12:41:39 - INFO - 🚀 Pipeline started
+
+2025-11-17 12:41:39 - INFO - Loaded 16327 rows and 11 columns.
+
+2025-11-17 12:41:39 - INFO - Connecting to MySQL...
+
+2025-11-17 12:41:40 - INFO - Inserted 16327 rows successfully.
+
+2025-11-17 12:41:40 - INFO - Pipeline finished in 0.95 seconds
+
+
