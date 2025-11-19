@@ -14,7 +14,7 @@ logging.basicConfig(
 
 def load_clean_data():
     logging.info("Loading clean_sales.csv ...")
-    df = pd.read_csv("../data/clean_sales.csv")
+    df = pd.read_csv("/Users/gauthamgongada/Desktop/sales-analytics-app/data/clean_sales.csv")
     logging.info(f"Loaded {df.shape[0]} rows and {df.shape[1]} columns.")
     return df
 
