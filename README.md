@@ -229,3 +229,63 @@ Example API output (from /top-games)
 
 Backend layer is now complete.
 API is live and successfully connected to MySQL.
+
+
+**Day 6 – Tableau Dashboard + Public Link**
+
+### Goal
+
+Create an interactive Tableau dashboard using the MySQL database and publish it online for easy access.
+
+### What I built
+
+- Connected Tableau to the salesdb MySQL database
+
+- Built multiple visualizations:
+
+- Yearly sales trend
+
+- Top games
+
+- Sales by region
+
+- Sales by genre
+
+- Platform and publisher performance
+
+- Combined all visuals into one clean dashboard
+
+- Published the dashboard to Tableau Public
+
+- Added the link + screenshot to the /dashboard folder
+
+### Why this is important
+
+- Shows BI/visualization skills
+
+- Demonstrates end-to-end analytics workflow:
+  ETL → MySQL → Tableau
+
+### Files created today
+
+- dashboard/Dashboard.png → Screenshot
+
+- dashboard/tableau_link.txt → Public link
+
+### How to publish
+
+- Server → Tableau Public → Save to Tableau Public
+
+- Log in and save
+
+- Copy the public link
+
+- Paste it into dashboard/tableau_link.txt
+
+### How to view
+
+- Open the Tableau link or the screenshot inside /dashboard.
+
+### Status
+
+Tableau analytics layer is complete and live.
