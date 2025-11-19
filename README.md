@@ -289,3 +289,53 @@ Create an interactive Tableau dashboard using the MySQL database and publish it 
 ### Status
 
 Tableau analytics layer is complete and live.
+
+ **DAY 7 — Bug Fixing, Optimization & Project Cleanup**
+ ### Goal
+
+Stabilize the entire project, fix issues, clean the repository, and make sure all layers (ETL → MySQL → API → Tableau) work smoothly.
+
+### What I Completed Today
+- Bug Fixing Across ETL, API & Dashboard
+
+- Verified all Flask endpoints:
+  /top-games, /sales-by-platform, /sales-by-region
+
+- Fixed file path issues in ETL pipeline.
+
+- Restarted and cleared port conflicts for Flask server.
+
+- Confirmed cleaned dataset loads correctly into MySQL.
+
+### ETL Pipeline Validation
+
+- Ran pipeline.py successfully.
+
+- Confirmed clean data loads into MySQL without errors.
+
+- Verified correct row count, column names, and datatypes.
+
+### Repository Cleanup
+
+- Removed unused/backup files.
+
+- Organized folders: backend/, etl/, dashboard/, sql/, data/.
+
+- Ensured clean folder structure with only necessary files.
+
+- Updated .gitignore to avoid logging clutter.
+
+### Tableau Dashboard Integration Review
+
+- Confirmed Tableau connected properly to MySQL extract.
+
+- Verified all dashboard sheets update correctly.
+
+- Ensured published dashboard link is stored in dashboard/tableau_link.txt.
+
+- Added clean screenshot inside dashboard/.
+
+### Day 7 Status
+
+ Everything is clean, optimized, tested, and stable.
+ The full workflow ETL → MySQL → API → Tableau is working end-to-end.
