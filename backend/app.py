@@ -121,4 +121,3 @@ def yearly_sales():
 if __name__ == "__main__":
     # debug=True auto-restarts server when you change code (dev mode only)
     app.run(debug=True)
-

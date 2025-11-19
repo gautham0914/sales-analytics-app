@@ -2,7 +2,7 @@ import pandas as pd
 import mysql.connector
 
 # 1. Read the cleaned CSV
-path = 'data/clean_sales.csv'
+path = '/Users/gauthamgongada/Desktop/sales-analytics-app/data/clean_sales.csv'
 df = pd.read_csv(path)
 
 print("CSV loaded. Shape:", df.shape)

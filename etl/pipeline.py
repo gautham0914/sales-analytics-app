@@ -7,16 +7,14 @@ import time
 
 # Create a log file to track each pipeline run
 logging.basicConfig(
-    filename="log/pipeline.log",
+    filename="/Users/gauthamgongada/Desktop/sales-analytics-app/log/pipeline.log",
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 def load_clean_data():
     logging.info("Loading clean_sales.csv ...")
-    
-    df = pd.read_csv("data/clean_sales.csv")
-    
+    df = pd.read_csv("../data/clean_sales.csv")
     logging.info(f"Loaded {df.shape[0]} rows and {df.shape[1]} columns.")
     return df
 
