@@ -116,6 +116,21 @@ def yearly_sales():
     data = query_to_dicts(sql)
     return jsonify(data)
 
+@app.route("/Publisher-sales", methods=["GET"])
+def publisher_sales():
+    """
+    Total sales by publisher.
+    """
+    sql = """
+        SELECT Publisher, SUM(Global_Sales) AS total_sales
+        FROM sales_data
+        WHERE Publisher IS NOT NULL
+        GROUP BY Publisher
+        ORDER BY total_sales;
+    """
+    data = query_to_dicts(sql)
+    return jsonify(data)
+
 
 #  Run this code only in main(app.py), and not when it's imported 
 if __name__ == "__main__":
