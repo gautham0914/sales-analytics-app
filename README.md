@@ -2,7 +2,7 @@
 
 Building an end-to-end Sales Analytics App in 14 days.
 
-**Day 1 – Setup**
+## Day 1 – Setup
 - Installed tools  
 - Created folder structure  
 - Added dataset  
@@ -10,8 +10,7 @@ Building an end-to-end Sales Analytics App in 14 days.
 
 Dataset: data/sales_analyst.csv
 
-
-**Day 2 — Data Cleaning (ETL)**
+## Day 2 — Data Cleaning (ETL)
 
 **Goal:** Prepare raw sales data for analysis by cleaning and standardizing it.
 
@@ -35,7 +34,7 @@ The dataset is fully cleaned and ready for loading into SQL (Day 3).
 
 
 
-**Day 3 — SQL Database Integration & Analysis**
+## Day 3 — SQL Database Integration & Analysis
 
 **Goal:** Load the cleaned dataset into MySQL and perform SQL-based analysis.
 
@@ -66,7 +65,7 @@ SQL layer is complete.
 Dataset is now fully analyzed and ready.
 
 
-**Day 4 - Automated ETL Pipeline (Python → MySQL + Logging)**
+## Day 4 - Automated ETL Pipeline (Python → MySQL + Logging)
 
 ### Goal 
 Automate the entire ETL + Database refresh process so the dataset can be cleaned and loaded into MySQL automatically at any time. 
@@ -131,7 +130,7 @@ Automate the entire ETL + Database refresh process so the dataset can be cleaned
 
 2025-11-17 12:41:40 - INFO - Pipeline finished in 0.95 seconds
 
-**Day 5 – Flask API + MySQL Integration (Backend Layer)**
+## Day 5 – Flask API + MySQL Integration (Backend Layer)
 ### Goal
 
 Build a working backend API using Flask that connects to MySQL and returns live game-sales data through JSON endpoints.
@@ -231,7 +230,7 @@ Backend layer is now complete.
 API is live and successfully connected to MySQL.
 
 
-**Day 6 – Tableau Dashboard + Public Link**
+## Day 6 – Tableau Dashboard + Public Link
 
 ### Goal
 
@@ -290,7 +289,7 @@ Create an interactive Tableau dashboard using the MySQL database and publish it 
 
 Tableau analytics layer is complete and live.
 
- **DAY 7 — Bug Fixing, Optimization & Project Cleanup**
+ ## DAY 7 — Bug Fixing, Optimization & Project Cleanup
  ### Goal
 
 Stabilize the entire project, fix issues, clean the repository, and make sure all layers (ETL → MySQL → API → Tableau) work smoothly.
@@ -339,3 +338,123 @@ Stabilize the entire project, fix issues, clean the repository, and make sure al
 
  Everything is clean, optimized, tested, and stable.
  The full workflow ETL → MySQL → API → Tableau is working end-to-end.
+
+## DAY 8 — System Design + Documentation (Tableau Edition)
+
+### Goal
+Document the full data pipeline, create the architecture diagram, organize Tableau assets, and make the repository clean and interview-ready.
+
+### Tasks Completed
+
+### 1. Created Architecture Diagram
+A Tableau-centric system design diagram was created and saved at:
+docs/architecture_diagram.png
+
+Data Flow:
+sales_analyst.csv → ETL → clean_sales.csv → MYSQL → (API optional) → Tableau Dashboard
+
+This shows the complete end-to-end pipeline in a single visual.
+
+### 2. Organized Tableau Assets
+Created a new folder:
+tableau/
+
+Added the following files:
+- dashboard.twbx
+- dashboard_screenshot.png
+- tableau_public_link.txt
+
+This keeps all Tableau-related items in one place.
+
+### 3. Updated README (Pipeline + Tableau Instructions)
+Added sections explaining:
+- Project overview
+- Architecture diagram
+- Tools used (Python, pandas, PostgreSQL, Flask, Tableau)
+- How Tableau connects to PostgreSQL
+- How the dashboard was published to Tableau Public
+- Screenshot of the dashboard
+
+### 4. Documented API Endpoints
+Added clear descriptions for:
+- /revenue
+- /top-products
+- /sales-by-region
+- /monthly-revenue
+
+These show the analytical API layer of the project.
+
+### 5. Added “How to Run This Project” Section
+Documented steps for:
+- cloning the repo
+- installing dependencies
+- running the ETL
+- running the API
+- connecting Tableau to PostgreSQL
+- publishing to Tableau Public
+### Files Added/Updated
+- docs/architecture_diagram.png
+- tableau/dashboard.twbx
+- tableau/dashboard_screenshot.png
+- tableau/tableau_public_link.txt
+- README.md (architecture, Tableau instructions, API documentation)
+### Summary
+Day 8 focused on documentation, system design, and making the project look complete and professional. The architecture diagram, Tableau assets, and updated README provide a clear overview of the entire pipeline for recruiters and technical reviewers.
+## DAY 9 — SECURITY (Environment Variables + Password Hashing + Secrets Management)
+
+### Goal
+Secure the project by removing hard-coded passwords, using environment variables, protecting secrets from GitHub, and adding a simple password hashing demonstration.
+
+### Tasks Completed
+
+### 1. Added .env for local secrets
+Created a `.env` file (not uploaded to GitHub) to store:
+- DB_HOST
+- DB_NAME
+- DB_USER
+- DB_PASSWORD
+- DB_PORT
+
+This keeps real credentials out of the codebase.
+
+### 2. Implemented python-dotenv
+Both `etl/pipeline.py` and `backend/app.py` were updated to use:
+- load_dotenv()
+- os.getenv()
+
+All database connections now pull values from environment variables instead of plain text.
+
+### 3. Updated .gitignore
+Added entries to prevent sensitive or unnecessary files from being committed:
+.env
+log/
+pycache/
+*.pyc
+
+diff
+Copy code
+
+### 4. Added .env.example
+Created a template file (`.env.example`) containing placeholder values so anyone cloning the repo knows which variables to create.
+
+### 5. Added a password hashing demo
+- Created `security/hash_demo.py` to demonstrate:
+- hashing a password using bcrypt
+- verifying correct vs wrong passwords
+- understanding hashing and salting basics
+
+### Files Added/Updated
+- .env.example
+- .gitignore
+- backend/app.py (dotenv integration)
+- etl/pipeline.py (dotenv integration)
+- security/hash_demo.py
+
+### Summary
+**Day 9 adds essential security practices:**
+- secrets removed from all Python files
+- environment variables implemented correctly
+- sensitive files ignored by Git
+- example env template added for safe sharing
+- hashing fundamentals demonstrated for interviews
+
