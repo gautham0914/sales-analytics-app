@@ -458,3 +458,119 @@ Created a template file (`.env.example`) containing placeholder values so anyone
 - example env template added for safe sharing
 - hashing fundamentals demonstrated for interviews
 
+## DAY 10 — Transactions, Indexing & Query Performance Optimization
+### Goal
+
+Improve database reliability and speed by adding transactions, creating indexes, building an analytical SQL view, and measuring real performance improvements using EXPLAIN ANALYZE.
+
+### Tasks Completed
+### 1. Implemented Database Transactions
+
+- Created sql/transactions.sql to safely test updates without damaging real data.
+- Added BEGIN, COMMIT, and ROLLBACK
+- Demonstrated temporary data changes
+- Included ACID explanations:
+  
+ **Atomicity** — all or nothing
+  
+ **Consistency** — stays valid after transactions
+ 
+ **Isolation** — parallel transactions don’t interfere
+ 
+ **Durability** — committed data is permanent
+ 
+This shows understanding of how real databases ensure reliability.
+
+### 2. Added Indexes for Faster Query Performance
+
+- Created sql/indexes.sql and added indexes on:
+- Platform
+- Genre
+-  Publisher
+-  Year
+- Global_Sales
+- Composite index: (Platform, Genre)
+
+### Purpose:
+
+- Reduce full table scans
+- Speed up grouping, filtering, and sorting
+- Improve performance for dashboards and analytics
+- Indexes were run and validated in DBeaver.
+
+### 3. Created Analytical SQL View
+- File: sql/views.sql
+
+Created:
+v_genre_yearly_sales
+
+This view returns:
+Year
+Genre
+- SUM(Global_Sales) as total_global_sales
+### Benefits:
+
+- Reusable for Tableau and reporting
+- Cleaner SQL without repeating logic
+### 4. Performed Performance Benchmarking
+
+- Used EXPLAIN ANALYZE to measure actual execution time before and after indexing for three real queries:
+- GROUP BY (aggregation)
+- WHERE filter
+- ORDER BY with LIMIT
+  
+All results were logged in:
+sql/performance_notes.md
+
+**Performance Improvements (Before vs After)**
+
+✅ Query 1 — GROUP BY Platform
+
+Before indexing: 30.8 ms
+
+After indexing: 16.68 ms
+
+Improvement: **45.8% faster**
+
+Result: used index-assisted aggregation instead of full scan.
+
+✅ Query 2 — WHERE Genre = 'Sports'
+
+Before indexing: 15.1 ms
+
+After indexing: 5.73 ms
+
+Improvement: **62.0% faster**
+
+Result: switched from full table scan → index lookup.
+
+✅ Query 3 — ORDER BY Global_Sales DESC LIMIT 10
+
+Before optimization: 17.5 ms
+
+After descending index + LIMIT: 0.163 ms
+
+Improvement: **99% faster**
+
+Result: MySQL used index scan to return only top 10 rows without sorting.
+
+### Files Added/Updated
+
+- sql/transactions.sql
+- sql/indexes.sql
+- sql/views.sql
+- sql/performance_notes.md
+
+#### Summary
+
+Day 10 focused on improving backend and database performance by:
+
+- Implementing safe transaction handling
+
+- Adding meaningful indexes
+
+- Creating a reusable analytical view
+
+- Measuring real-world performance gains using EXPLAIN ANALYZE
+
+These changes prove data engineering thinking, not just writing SQL with measurable improvements documented for interviews.
