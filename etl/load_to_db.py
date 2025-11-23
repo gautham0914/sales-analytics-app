@@ -1,79 +1,84 @@
-import pandas as pd
 import mysql.connector
+from dotenv import load_dotenv
+import os
+import logging
 
-# 1. Read the cleaned CSV
-path = '/Users/gauthamgongada/Desktop/sales-analytics-app/data/clean_sales.csv'
-df = pd.read_csv(path)
+# Load environment variables
+load_dotenv()
 
-print("CSV loaded. Shape:", df.shape)
-print(df.head(3))
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_PORT = int(os.getenv("DB_PORT"))
 
-# 2. Connect Python → MySQL
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Gautham@123", 
-    database="salesdb",
-    port=3306
-)
-cur = conn.cursor()
 
-# 3. Drop old table and recreate
-cur.execute("DROP TABLE IF EXISTS sales_data")
+def load_to_db(df):
+    """Loads a cleaned DataFrame into MySQL"""
 
-create_table_sql = """
-CREATE TABLE sales_data (
-    `Rank` INT,
-    `Name` VARCHAR(255),
-    `Platform` VARCHAR(50),
-    `Year` INT,
-    `Genre` VARCHAR(50),
-    `Publisher` VARCHAR(100),
-    `NA_Sales` FLOAT,
-    `EU_Sales` FLOAT,
-    `JP_Sales` FLOAT,
-    `Other_Sales` FLOAT,
-    `Global_Sales` FLOAT,
-    id INT AUTO_INCREMENT PRIMARY KEY
-);
-"""
-cur.execute(create_table_sql)
-print("Table created successfully.")
+    logging.info("Connecting to MySQL...")
 
-#4. Prepare INSERT statement
-insert_sql = """
-INSERT INTO sales_data
-(`Rank`, `Name`, `Platform`, `Year`, `Genre`, `Publisher`,
- `NA_Sales`, `EU_Sales`, `JP_Sales`, `Other_Sales`, `Global_Sales`)
-VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-"""
+    conn = mysql.connector.connect(
+        host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
+        port=DB_PORT
+    )
+    cur = conn.cursor()
 
-# 5. Convert DataFrame → list of tuples
-rows = []
-for _, row in df.iterrows():
-    rows.append((
-        int(row['Rank']),
-        row['Name'],
-        row['Platform'],
-        int(row['Year']),
-        row['Genre'],
-        row['Publisher'],
-        float(row['NA_Sales']),
-        float(row['EU_Sales']),
-        float(row['JP_Sales']),
-        float(row['Other_Sales']),
-        float(row['Global_Sales']),
-    ))
+    logging.info("Recreating table sales_data...")
 
-# 6. Insert all rows
-cur.executemany(insert_sql, rows)
-conn.commit()
+    cur.execute("DROP TABLE IF EXISTS sales_data")
 
-print(f"Inserted {cur.rowcount} rows into MySQL.")
+    cur.execute("""
+        CREATE TABLE sales_data (
+            `Rank` INT,
+            `Name` VARCHAR(255),
+            `Platform` VARCHAR(50),
+            `Year` INT,
+            `Genre` VARCHAR(50),
+            `Publisher` VARCHAR(100),
+            `NA_Sales` FLOAT,
+            `EU_Sales` FLOAT,
+            `JP_Sales` FLOAT,
+            `Other_Sales` FLOAT,
+            `Global_Sales` FLOAT,
+            id INT AUTO_INCREMENT PRIMARY KEY
+        )
+    """)
 
-# 7. Close connections
-cur.close()
-conn.close()
-print("Done.")
+    insert_sql = """
+        INSERT INTO sales_data
+        (`Rank`, `Name`, `Platform`, `Year`, `Genre`, `Publisher`,
+         `NA_Sales`, `EU_Sales`, `JP_Sales`, `Other_Sales`, `Global_Sales`)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
 
-conn = mysql.connector.connect
+    rows = [
+        (
+            int(row['Rank']),
+            row['Name'],
+            row['Platform'],
+            int(row['Year']) if row['Year'] == row['Year'] else None,
+            row['Genre'],
+            row['Publisher'],
+            float(row['NA_Sales']),
+            float(row['EU_Sales']),
+            float(row['JP_Sales']),
+            float(row['Other_Sales']),
+            float(row['Global_Sales'])
+        )
+        for _, row in df.iterrows()
+    ]
+
+    cur.executemany(insert_sql, rows)
+    conn.commit()
+
+    logging.info(f"✅ Inserted {cur.rowcount} rows into MySQL.")
+
+    cur.close()
+    conn.close()
+
+    logging.info("✅ load_to_db() completed successfully")
+

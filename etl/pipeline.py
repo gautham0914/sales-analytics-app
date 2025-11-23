@@ -3,6 +3,9 @@ import pandas as pd
 import mysql.connector
 import logging
 import time
+from transform import transform_data
+from load_to_db import load_to_db
+
 #for python to read .env file for credentials
 from dotenv import load_dotenv
 import os
@@ -93,7 +96,18 @@ def run_pipeline():
     duration = round(end - start, 2)
     logging.info(f"Pipeline finished in {duration} seconds")
 
+def run_pipeline():
+    try:
+        logging.info("🚀 Pipeline started")
+        df = transform_data()
+        load_to_db(df)
+        logging.info(f"✅ Data loaded successfully — {df.shape[0]} rows")
+
+        logging.info("✅ Pipeline finished successfully")
+    except Exception as e:
+        logging.error(f"❌ Pipeline failed: {e}")
 
 if __name__ == "__main__":
     run_pipeline()
+
 

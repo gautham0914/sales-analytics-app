@@ -1,10 +1,22 @@
+import logging
 from flask import Flask, jsonify
 import mysql.connector
-
 from dotenv import load_dotenv
 import os
 
+# ✅ Configure logging correctly
+logging.basicConfig(
+    filename='data/api.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+# ✅ Load environment variables
 load_dotenv()
+
+app = Flask(__name__)
+
+
 
 DB_HOST = os.getenv("DB_HOST")
 DB_NAME = os.getenv("DB_NAME")
@@ -12,17 +24,21 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_PORT = os.getenv("DB_PORT")
 
-app = Flask(__name__)
-
 # Database Connection
 def get_connection():
-    conn = mysql.connector.connect(
-        host="DB_HOST",
-        user="DB_USER",
-        password="DB_PASSWORD", 
-        database="DB_NAME"
-    )
-    return conn
+    try:
+        conn = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME,
+            port=DB_PORT
+        )
+        return conn
+
+    except Exception as e:
+        logging.error(f"❌ Database connection failed: {e}")
+        return None
 
 
 #  helps to  run a SQL query and convert to list of dicts in python 
@@ -49,10 +65,12 @@ def query_to_dicts(sql, params=None):
 # WHEN SOMEONE VISITS URL(/), THIS TELLS FLASK TO RUN THE BELOW FUNCTION
 def home():
     return jsonify({"message": " Sales Analytics API is running"})  # tells API is running
+logging.info("✅ '/' home endpoint called")
 
 
 @app.route("/total-global-sales")
 def total_global_sales():
+    logging.info("✅ /total-global-sales endpoint called")
     conn = get_connection()                                  # SQL CONNECTION
     cur = conn.cursor()                                      # TOOL TO RUN SQL COMMANDS
     cur.execute("SELECT SUM(Global_Sales) FROM sales_data;")
@@ -62,11 +80,15 @@ def total_global_sales():
 
     # result might be Decimal/None, so convert safely
     total = float(result) if result is not None else 0.0     # JSON only supports specific data types
+    
     return jsonify({"total_global_sales": total})
+
+
 
 
 @app.route("/top-games")
 def top_games():
+    logging.info("✅ /top-games endpoint called")
     """
     Top 10 games by total Global_Sales (across all rows).
     Groups by Name.
@@ -79,11 +101,16 @@ def top_games():
         LIMIT 10;
     """
     data = query_to_dicts(sql)
+    if data is None:
+        return jsonify({"error": "database connection failed"}), 500
     return jsonify(data)
+
+
 
 
 @app.route("/sales-by-genre")
 def sales_by_genre():
+    logging.info("✅ /sales-by-genre endpoint called")
     """
     Total Global_Sales by Genre.
     """
@@ -94,11 +121,16 @@ def sales_by_genre():
         ORDER BY total_sales DESC;
     """
     data = query_to_dicts(sql)
+    if data is None:
+        return jsonify({"error": "database connection failed"}), 500
     return jsonify(data)
+
+
 
 
 @app.route("/sales-by-platform")
 def sales_by_platform():
+    logging.info("✅ /sales-by-platform endpoint called")
     """
     Total Global_Sales by Platform.
     """
@@ -109,11 +141,16 @@ def sales_by_platform():
         ORDER BY total_sales DESC;
     """
     data = query_to_dicts(sql)
+    if data is None:
+        return jsonify({"error": "database connection failed"}), 500
     return jsonify(data)
+
+
 
 
 @app.route("/yearly-sales")
 def yearly_sales():
+    logging.info("✅ /yearly-sales endpoint called")
     """
     Total Global_Sales by Year.
     """
@@ -125,10 +162,15 @@ def yearly_sales():
         ORDER BY Year;
     """
     data = query_to_dicts(sql)
+    if data is None:
+        return jsonify({"error": "database connection failed"}), 500
     return jsonify(data)
+
+
 
 @app.route("/Publisher-sales", methods=["GET"])
 def publisher_sales():
+    logging.info("✅ /publisher-sales endpoint called")
     """
     Total sales by publisher.
     """
@@ -140,10 +182,12 @@ def publisher_sales():
         ORDER BY total_sales;
     """
     data = query_to_dicts(sql)
+    if data is None:
+        return jsonify({"error": "database connection failed"}), 500
     return jsonify(data)
 
 
 #  Run this code only in main(app.py), and not when it's imported 
 if __name__ == "__main__":
     # debug=True auto-restarts server when you change code (dev mode only)
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
