@@ -560,7 +560,7 @@ Result: MySQL used index scan to return only top 10 rows without sorting.
 - sql/indexes.sql
 - sql/views.sql
 - sql/performance_notes.md
-
+- 
 #### Summary
 
 Day 10 focused on improving backend and database performance by:
@@ -573,4 +573,76 @@ Day 10 focused on improving backend and database performance by:
 
 - Measuring real-world performance gains using EXPLAIN ANALYZE
 
-These changes prove data engineering thinking, not just writing SQL with measurable improvements documented for interviews.
+These changes prove data engineering thinking, not just writing SQL with measurable improvements documented for.
+
+## Day 11 — Logging, Error Handling & Testing
+### Goal
+
+- Make the project production-safe, traceable, and reliable by adding:
+- logging
+- error handling
+- automated tests
+- secure credentials
+
+### Added Logging to API
+
+#### What we did:
+
+- Configured logging in backend/app.py
+
+- Added logging.info() in every route
+
+#### Purpose
+Helps track:
+
+- when endpoints are accessed
+
+- success/failure details
+
+- Log file generated at: data/api.log
+
+### Added Error Handling to API
+
+Wrapped DB connection in try/except:
+
+try:
+    conn = get_connection()
+except Exception as e:
+    logging.error(f"DB connection failed: {e}")
+    return jsonify({"error": "database connection failed"}), 500
+
+#### Why it matters:
+
+- prevents API from crashing
+- returns clean JSON errors
+- logs failure for debugging
+
+### Created Safe Pipeline Runner
+
+New file: etl/pipeline_logging.py
+#### Includes:
+
+- try/except around pipeline
+
+- success + failure logging
+
+#### Run with:
+
+python -m etl.pipeline_logging
+#### Log stored at:
+log/pipeline.log
+
+### Added Unit Tests
+
+Created folder:
+
+tests/
+    test_transform.py
+### Tests verify:
+- no nulls in Global_Sales
+- Year column is integer
+- all expected columns exist
+### Run tests:
+pytest -q
+
+✅ all tests passed
