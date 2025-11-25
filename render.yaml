@@ -1,6 +1,0 @@
-services:
-  - type: web
-    name: sales-analytics-api
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -w 1 -b 0.0.0.0:$PORT backend.app:app
