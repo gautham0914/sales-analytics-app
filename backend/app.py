@@ -188,11 +188,20 @@ def publisher_sales():
         return jsonify({"error": "database connection failed"}), 500
     return jsonify(data)
 
+# TEST ROUTE — CHECK IF DB IS CONNECTING CORRECTLY
+@app.route("/test-db")
+def test_db():
+    conn = get_connection()
+    if conn:
+        return "DB Connected!"
+    else:
+        return "DB FAILED!", 500
 
 #  Run this code only in main(app.py), and not when it's imported 
 #if __name__ == "__main__":
     # debug=True auto-restarts server when you change code (dev mode only)
     #app.run(debug=True, port=5001)
+    
 
 import os
 
