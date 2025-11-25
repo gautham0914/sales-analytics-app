@@ -3,6 +3,8 @@ from flask import Flask, jsonify
 import mysql.connector
 from dotenv import load_dotenv
 import os
+from flask_cors import CORS
+
 
 # ✅ Configure logging correctly
 logging.basicConfig(
@@ -15,7 +17,7 @@ logging.basicConfig(
 load_dotenv()
 
 app = Flask(__name__)
-
+CORS(app)   
 
 
 DB_HOST = os.getenv("DB_HOST")
